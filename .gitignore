@@ -1,0 +1,52 @@
+# Gradle
+.gradle/
+build/
+**/build/
+!buildSrc/src/**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Runs do jogo (client/server/data de cada loader)
+run/
+runs/
+**/run/
+**/runs/
+
+# Datagen: a pasta e versionada, o cache nao
+**/src/generated/resources/.cache/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# Logs, crash reports e minecraft
+logs/
+crash-reports/
+*.log
+hs_err_pid*
+replay_pid*
+
+# Mixin / Loom
+*.refmap.json
+.loom/
+remappedSrc/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Credenciais e configs locais
+*.env
+local.properties
