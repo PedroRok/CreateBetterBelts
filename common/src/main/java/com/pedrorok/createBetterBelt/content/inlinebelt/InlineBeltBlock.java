@@ -1,6 +1,9 @@
 package com.pedrorok.createBetterBelt.content.inlinebelt;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.pedrorok.createBetterBelt.registry.CBBBlockEntityTypes;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity.CasingType;
@@ -15,8 +18,11 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
@@ -25,8 +31,17 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class InlineBeltBlock extends BeltBlock {
 
+	public static final BooleanProperty BRASS = BooleanProperty.create("brass");
+
 	public InlineBeltBlock(Properties properties) {
 		super(properties);
+		registerDefaultState(defaultBlockState().setValue(BRASS, false));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(BRASS);
 	}
 
 	@Override
@@ -51,16 +66,51 @@ public class InlineBeltBlock extends BeltBlock {
 	}
 
 	public static void encaseShaftedSegment(Level level, BlockPos pos) {
+		encaseShaftedSegment(level, pos, null);
+	}
+
+	public static void encaseShaftedSegment(Level level, BlockPos pos, @Nullable CasingType preferred) {
 		if (level.isClientSide)
 			return;
 		BlockState state = level.getBlockState(pos);
 		if (!hasShaft(state))
 			return;
-		if (!(level.getBlockEntity(pos) instanceof BeltBlockEntity be) || be.casing != CasingType.NONE)
+		if (!(level.getBlockEntity(pos) instanceof BeltBlockEntity be))
 			return;
+		if (be.casing != CasingType.NONE) {
+			syncCasingProperty(level, pos, be.casing);
+			return;
+		}
 
-		be.setCasingType(CasingType.ANDESITE);
+		be.setCasingType(preferred != null ? preferred : chainCasingType(level, be));
 		((BeltBlock) state.getBlock()).updateCoverProperty(level, pos, level.getBlockState(pos));
+	}
+
+	static CasingType chainCasingType(Level level, BeltBlockEntity be) {
+		BeltBlockEntity controller = be.getControllerBE();
+		if (controller == null)
+			return CasingType.ANDESITE;
+		if (controller.casing != CasingType.NONE)
+			return controller.casing;
+		for (BlockPos segment : BeltBlock.getBeltChain(level, controller.getBlockPos()))
+			if (level.getBlockEntity(segment) instanceof BeltBlockEntity other && other.casing != CasingType.NONE)
+				return other.casing;
+		return CasingType.ANDESITE;
+	}
+
+	public static void syncCasingProperty(Level level, BlockPos pos, CasingType casing) {
+		BlockState state = level.getBlockState(pos);
+		if (!isInlineBelt(state))
+			return;
+		boolean brass = casing == CasingType.BRASS;
+		if (state.getValue(BRASS) == brass)
+			return;
+		BlockState synced = state.setValue(BRASS, brass);
+		if (level.isClientSide) {
+			level.setBlock(pos, synced, Block.UPDATE_CLIENTS);
+			return;
+		}
+		KineticBlockEntity.switchToBlockState(level, pos, synced);
 	}
 
 	public static Direction pulleyDirection(BlockState state, Direction fallback) {

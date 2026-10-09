@@ -9,14 +9,14 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
  */
 public class CBBRegistrate {
 
-	private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Constants.MOD_ID);
+    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Constants.MOD_ID);
 
-	public static CreateRegistrate get() {
-		return REGISTRATE;
-	}
+    public static CreateRegistrate get() {
+        return REGISTRATE;
+    }
 
-	public static void buildEntries() {
-		CBBBlocks.register();
-		CBBBlockEntityTypes.register();
-	}
+    public static void buildEntries() {
+        CBBBlocks.register();
+        CBBBlockEntityTypes.register();
+    }
 }

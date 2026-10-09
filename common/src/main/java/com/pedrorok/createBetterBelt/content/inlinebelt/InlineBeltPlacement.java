@@ -6,6 +6,7 @@ import java.util.List;
 import com.pedrorok.createBetterBelt.registry.CBBBlocks;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
+import com.simibubi.create.content.kinetics.belt.BeltBlockEntity.CasingType;
 import com.simibubi.create.content.kinetics.belt.BeltPart;
 import com.simibubi.create.content.kinetics.belt.BeltSlope;
 import com.simibubi.create.content.kinetics.belt.item.BeltConnectorItem;
@@ -102,7 +103,7 @@ public class InlineBeltPlacement {
 		return true;
 	}
 
-	public static void createInlineBelts(Level level, BlockPos start, BlockPos end) {
+	public static boolean createInlineBelts(Level level, BlockPos start, BlockPos end, CasingType casing) {
 		BlockState startState = level.getBlockState(start);
 		Axis axis = startState.getValue(AbstractSimpleShaftBlock.AXIS);
 		BlockPos diff = end.subtract(start);
@@ -140,20 +141,22 @@ public class InlineBeltPlacement {
 				belt.setValue(BeltBlock.SLOPE, slope)
 					.setValue(BeltBlock.PART, part)
 					.setValue(BeltBlock.CASING, shafted)
+					.setValue(InlineBeltBlock.BRASS, shafted && casing == CasingType.BRASS)
 					.setValue(BeltBlock.HORIZONTAL_FACING, facing),
 				pos));
 
 			if (shafted)
-				InlineBeltBlock.encaseShaftedSegment(level, pos);
+				InlineBeltBlock.encaseShaftedSegment(level, pos, casing);
 		}
 
 		if (!failed)
-			return;
+			return true;
 
 		for (BlockPos pos : segments)
 			if (level.getBlockState(pos)
 				.getBlock() instanceof InlineBeltBlock)
 				level.destroyBlock(pos, false);
+		return false;
 	}
 
 	static List<BlockPos> chainBetween(BlockPos start, BlockPos end, BeltSlope slope, Direction facing) {

@@ -24,6 +24,13 @@ public class InlineBeltBlockEntity extends BeltBlockEntity {
 	}
 
 	@Override
+	public void setCasingType(CasingType type) {
+		super.setCasingType(type);
+		if (level != null)
+			InlineBeltBlock.syncCasingProperty(level, worldPosition, casing);
+	}
+
+	@Override
 	public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff,
 		boolean connectedViaAxes, boolean connectedViaCogs) {
 		if (target instanceof BeltBlockEntity belt && getController().equals(belt.getController()))

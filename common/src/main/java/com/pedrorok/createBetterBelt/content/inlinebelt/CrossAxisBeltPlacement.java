@@ -6,6 +6,7 @@ import com.pedrorok.createBetterBelt.registry.CBBBlocks;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
+import com.simibubi.create.content.kinetics.belt.BeltBlockEntity.CasingType;
 import com.simibubi.create.content.kinetics.belt.BeltPart;
 import com.simibubi.create.content.kinetics.belt.BeltSlope;
 import com.simibubi.create.content.kinetics.belt.item.BeltConnectorItem;
@@ -96,7 +97,7 @@ public class CrossAxisBeltPlacement {
 		return true;
 	}
 
-	public static void createCrossAxisBelts(Level level, BlockPos start, BlockPos end) {
+	public static boolean createCrossAxisBelts(Level level, BlockPos start, BlockPos end, CasingType casing) {
 		BlockPos diff = end.subtract(start);
 		Axis path = pathAxis(diff);
 		int along = path.choose(diff.getX(), 0, diff.getZ());
@@ -123,7 +124,10 @@ public class CrossAxisBeltPlacement {
 
 			boolean inline = part != BeltPart.MIDDLE && ShaftBlock.isShaft(existing)
 				&& existing.getValue(AbstractSimpleShaftBlock.AXIS) == path;
-			BlockState belt = inline ? CBBBlocks.INLINE_BELT.getDefaultState() : AllBlocks.BELT.getDefaultState();
+			BlockState belt = inline
+				? CBBBlocks.INLINE_BELT.getDefaultState()
+					.setValue(InlineBeltBlock.BRASS, casing == CasingType.BRASS)
+				: AllBlocks.BELT.getDefaultState();
 
 			if (!existing.canBeReplaced())
 				level.destroyBlock(pos, false);
@@ -136,15 +140,16 @@ public class CrossAxisBeltPlacement {
 				pos));
 
 			if (inline)
-				InlineBeltBlock.encaseShaftedSegment(level, pos);
+				InlineBeltBlock.encaseShaftedSegment(level, pos, casing);
 		}
 
 		if (!failed)
-			return;
+			return true;
 
 		for (BlockPos pos : segments)
 			if (level.getBlockState(pos)
 				.getBlock() instanceof BeltBlock)
 				level.destroyBlock(pos, false);
+		return false;
 	}
 }

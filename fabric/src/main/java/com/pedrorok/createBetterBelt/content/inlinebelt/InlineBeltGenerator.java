@@ -49,8 +49,10 @@ public class InlineBeltGenerator extends BeltGenerator {
 
 		String slopeName = diagonal ? "diagonal" : slope.getSerializedName();
 
-		if (slopeName.equals("horizontal") && part != BeltPart.MIDDLE)
-			return own("block/inline_belt_" + (part == BeltPart.END ? "end" : "start") + "_casing");
+		if (slopeName.equals("horizontal") && part != BeltPart.MIDDLE) {
+			String material = state.getValue(InlineBeltBlock.BRASS) ? "brass_inline_belt_" : "inline_belt_";
+			return own("block/" + material + (part == BeltPart.END ? "end" : "start") + "_casing");
+		}
 
 		return create("block/belt_casing/" + slopeName + "_" + part.getSerializedName());
 	}
