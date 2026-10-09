@@ -27,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltBlock.class, remap = false)
+@Mixin(BeltBlock.class)
 public class BeltBlockMixin {
 
 	private static final String BELT_ENTRY_HAS =

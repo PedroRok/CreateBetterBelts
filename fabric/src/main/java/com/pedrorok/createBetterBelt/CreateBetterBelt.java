@@ -1,5 +1,8 @@
 package com.pedrorok.createBetterBelt;
 
+import com.pedrorok.createBetterBelt.registry.CBBItemStorage;
+import com.pedrorok.createBetterBelt.registry.CBBRegistrate;
+
 import net.fabricmc.api.ModInitializer;
 
 /**
@@ -8,10 +11,13 @@ import net.fabricmc.api.ModInitializer;
  */
 public class CreateBetterBelt implements ModInitializer {
 
-    @Override
-    public void onInitialize() {
+	@Override
+	public void onInitialize() {
+		CommonClass.init();
 
-        Constants.LOG.info("Hello Fabric world!");
-        CommonClass.init();
-    }
+		CBBRegistrate.buildEntries();
+		CBBRegistrate.get().registerEventListeners();
+
+		CBBItemStorage.register();
+	}
 }

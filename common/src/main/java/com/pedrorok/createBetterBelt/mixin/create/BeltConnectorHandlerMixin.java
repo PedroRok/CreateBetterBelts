@@ -24,10 +24,10 @@ import net.minecraft.world.phys.HitResult;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltConnectorHandler.class, remap = false)
+@Mixin(BeltConnectorHandler.class)
 public class BeltConnectorHandlerMixin {
 
-	@ModifyVariable(method = "tick", at = @At("STORE"), ordinal = 0)
+	@ModifyVariable(method = "tick", at = @At("STORE"), ordinal = 0, remap = false)
 	private static Axis cbb$previewAlongShaft(Axis shaftAxis) {
 		BlockPos first = cbb$firstShaft();
 		BlockPos selected = cbb$selectedShaft();
@@ -38,12 +38,6 @@ public class BeltConnectorHandlerMixin {
 		return InlineBeltPlacement.acrossFrom(shaftAxis);
 	}
 
-	/**
-	 * The first shaft of the pending connection.
-	 * <p>
-	 * Recomputed instead of read out of the target's locals: Create's loop over the two hands returns at the end of
-	 * its first matching iteration, so walking the hands in the same order always lands on the same stack.
-	 */
 	private static BlockPos cbb$firstShaft() {
 		Player player = Minecraft.getInstance().player;
 		if (player == null)
@@ -58,7 +52,6 @@ public class BeltConnectorHandlerMixin {
 		return null;
 	}
 
-	/** The block the player is pointing at, resolved the same way Create resolves it a few lines further down. */
 	private static BlockPos cbb$selectedShaft() {
 		Level level = Minecraft.getInstance().level;
 		if (level == null || !(Minecraft.getInstance().hitResult instanceof BlockHitResult hit)

@@ -12,10 +12,10 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = KineticBlockEntity.class, remap = false)
+@Mixin(KineticBlockEntity.class)
 public class KineticBlockEntityMixin {
 
-	@ModifyReturnValue(method = "getSpeed", at = @At("RETURN"))
+	@ModifyReturnValue(method = "getSpeed", at = @At("RETURN"), remap = false)
 	private float cbb$reverseBelt(float speed) {
 		return (Object) this instanceof ReversibleBelt belt && belt.cbb$isReversed() ? -speed : speed;
 	}

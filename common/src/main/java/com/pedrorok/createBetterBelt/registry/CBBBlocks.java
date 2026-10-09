@@ -3,8 +3,7 @@ package com.pedrorok.createBetterBelt.registry;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 
 import com.pedrorok.createBetterBelt.content.inlinebelt.InlineBeltBlock;
-import com.pedrorok.createBetterBelt.content.inlinebelt.InlineBeltGenerator;
-import com.simibubi.create.content.kinetics.belt.BeltBlock;
+import com.pedrorok.createBetterBelt.platform.Services;
 import com.simibubi.create.content.kinetics.belt.BeltModel;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -28,9 +27,8 @@ public class CBBBlocks {
 				.mapColor(MapColor.COLOR_GRAY))
 			.addLayer(() -> RenderType::cutoutMipped)
 			.transform(axeOrPickaxe())
-			.blockstate(new InlineBeltGenerator()::generate)
 			.onRegister(CreateRegistrate.blockModel(() -> BeltModel::new))
-			.clientExtension(() -> () -> new BeltBlock.RenderProperties())
+			.transform(Services.PLATFORM.inlineBeltPlatformSetup())
 			.register();
 
 	public static void register() {}

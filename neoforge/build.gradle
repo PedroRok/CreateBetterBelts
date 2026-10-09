@@ -5,7 +5,7 @@ plugins {
 
 neoForge {
     version = neoforge_version
-    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = project.rootProject.file('common/src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.add(at.absolutePath)
     }
@@ -23,10 +23,10 @@ neoForge {
         }
         data {
             data()
-            // moddev does not supply these on its own; without them the providers never run
             programArguments.addAll '--mod', mod_id, '--all',
-                    '--output', file('src/generated/resources/').getAbsolutePath(),
-                    '--existing', file('src/main/resources/').getAbsolutePath()
+                    '--output', project.rootProject.file('common/src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath(),
+                    '--existing', project.rootProject.file('common/src/main/resources/').getAbsolutePath()
         }
         server {
             server()
@@ -45,5 +45,3 @@ neoForge {
         implementation("com.tterrag.registrate:Registrate:${registrate_version}")
     }
 }
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }

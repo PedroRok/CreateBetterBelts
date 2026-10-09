@@ -18,7 +18,8 @@ public class CreateBetterBelt {
 	public CreateBetterBelt(IEventBus eventBus) {
 		CommonClass.init();
 
-		CBBRegistrate.register(eventBus);
+		CBBRegistrate.get().registerEventListeners(eventBus);
+		CBBRegistrate.buildEntries();
 		eventBus.addListener(CBBCapabilities::register);
 
 		if (FMLEnvironment.dist.isClient())

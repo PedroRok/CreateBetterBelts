@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.Property;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltVisual.class, remap = false)
+@Mixin(BeltVisual.class)
 public class BeltVisualMixin {
 
 	@Unique
@@ -53,7 +53,7 @@ public class BeltVisualMixin {
 			BeltRenderer.getBeltPartial(diagonal, start, end, bottom));
 	}
 
-	@Redirect(method = { "<init>", "update" }, at = @At(value = "INVOKE",
+	@Redirect(method = { "<init>", "update" }, remap = false, at = @At(value = "INVOKE",
 		target = "Lcom/simibubi/create/content/kinetics/base/RotatingInstance;setup(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;)Lcom/simibubi/create/content/kinetics/base/RotatingInstance;"))
 	private RotatingInstance cbb$pulleyFollowsShaft(RotatingInstance instance, KineticBlockEntity be) {
 		return instance.setup(be, BeltReversal.shaftSpeedOf(be));

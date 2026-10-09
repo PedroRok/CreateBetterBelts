@@ -3,10 +3,17 @@
   "minVersion": "0.8",
   "package": "com.pedrorok.createBetterBelt.mixin",
   "refmap": "${mod_id}.refmap.json",
-  "compatibilityLevel": "JAVA_18",
-  "mixins": [],
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "create.BeltBlockMixin",
+    "create.BeltBlockEntityMixin",
+    "create.KineticBlockEntityMixin",
+    "create.BeltConnectorItemMixin"
+  ],
   "client": [
-    "MixinMinecraft"
+    "create.BeltRendererMixin",
+    "create.BeltVisualMixin",
+    "create.BeltConnectorHandlerMixin"
   ],
   "server": [],
   "injectors": {

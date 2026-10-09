@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltConnectorItem.class, remap = false)
+@Mixin(BeltConnectorItem.class)
 public class BeltConnectorItemMixin {
 
 	@Inject(method = "canConnect", at = @At("HEAD"), cancellable = true)

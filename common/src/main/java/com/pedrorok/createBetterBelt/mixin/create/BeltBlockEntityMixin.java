@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltBlockEntity.class, remap = false)
+@Mixin(BeltBlockEntity.class)
 public class BeltBlockEntityMixin implements ReversibleBelt {
 
 	@Unique

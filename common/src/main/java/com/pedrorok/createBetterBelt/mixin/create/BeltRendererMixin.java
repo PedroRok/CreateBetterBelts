@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author Rok, Pedro Lucas nmm. 08/10/2026
  * @project create-better-belt
  */
-@Mixin(value = BeltRenderer.class, remap = false)
+@Mixin(BeltRenderer.class)
 public class BeltRendererMixin {
 
 	@Redirect(method = "renderSafe", at = @At(value = "INVOKE",
@@ -38,7 +38,7 @@ public class BeltRendererMixin {
 	}
 
 	@Redirect(
-		method = "renderSafe(Lcom/simibubi/create/content/kinetics/belt/BeltBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+		method = "renderSafe",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Direction;getClockWise()Lnet/minecraft/core/Direction;"))
 	private Direction cbb$pulleyAlongBelt(Direction facing, BeltBlockEntity be, float partialTicks, PoseStack ms,
 		MultiBufferSource buffer, int light, int overlay) {
@@ -46,7 +46,7 @@ public class BeltRendererMixin {
 	}
 
 	@Redirect(
-		method = "renderSafe(Lcom/simibubi/create/content/kinetics/belt/BeltBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+		method = "renderSafe",
 		at = @At(value = "INVOKE",
 			target = "Lcom/simibubi/create/content/kinetics/belt/BeltRenderer;getBeltPartial(ZZZZ)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;"))
 	private PartialModel cbb$inlineBeltEnds(boolean diagonal, boolean start, boolean end, boolean bottom,
@@ -56,7 +56,7 @@ public class BeltRendererMixin {
 	}
 
 	@Redirect(
-		method = "renderSafe(Lcom/simibubi/create/content/kinetics/belt/BeltBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+		method = "renderSafe",
 		at = @At(value = "INVOKE",
 			target = "Lcom/simibubi/create/content/kinetics/base/KineticBlockEntityRenderer;standardKineticRotationTransform(Lnet/createmod/catnip/render/SuperByteBuffer;Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;I)Lnet/createmod/catnip/render/SuperByteBuffer;"))
 	private SuperByteBuffer cbb$pulleyFollowsShaft(SuperByteBuffer buffer, KineticBlockEntity be, int light) {

@@ -7,16 +7,18 @@
   "authors": [
     "${mod_author}"
   ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
+  "contact": {},
   "license": "${license}",
-  "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
     "main": [
       "com.pedrorok.createBetterBelt.CreateBetterBelt"
+    ],
+    "client": [
+      "com.pedrorok.createBetterBelt.client.CreateBetterBeltClient"
+    ],
+    "fabric-datagen": [
+      "com.pedrorok.createBetterBelt.data.CreateBetterBeltDatagen"
     ]
   },
   "mixins": [
@@ -24,12 +26,10 @@
     "${mod_id}.fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${fabric_loader_version}",
+    "fabricloader": ">=0.16.14",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "java": ">=${java_version}"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "java": ">=${java_version}",
+    "create": ">=6.0.0"
   }
 }

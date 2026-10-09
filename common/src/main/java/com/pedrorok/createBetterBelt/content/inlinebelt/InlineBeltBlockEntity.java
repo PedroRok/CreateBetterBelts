@@ -1,13 +1,11 @@
 package com.pedrorok.createBetterBelt.content.inlinebelt;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
 
 /**
  * @author Rok, Pedro Lucas nmm. 08/10/2026
@@ -23,14 +21,6 @@ public class InlineBeltBlockEntity extends BeltBlockEntity {
 	public void initialize() {
 		super.initialize();
 		InlineBeltBlock.encaseShaftedSegment(level, worldPosition);
-	}
-
-	public IItemHandler getOrCreateItemHandler() {
-		if (!BeltBlock.canTransportObjects(getBlockState()))
-			return null;
-		if (!isRemoved() && itemHandler == null)
-			initializeItemHandler();
-		return itemHandler;
 	}
 
 	@Override

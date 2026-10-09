@@ -4,17 +4,9 @@
   "package": "com.pedrorok.createBetterBelt.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "create.BeltBlockMixin",
-    "create.BeltBlockEntityMixin",
-    "create.KineticBlockEntityMixin",
-    "create.BeltConnectorItemMixin"
+    "create.BeltBlockEntityAccessor"
   ],
-  "client": [
-    "MixinTitleScreen",
-    "create.BeltRendererMixin",
-    "create.BeltVisualMixin",
-    "create.BeltConnectorHandlerMixin"
-  ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

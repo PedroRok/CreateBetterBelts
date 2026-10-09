@@ -42,8 +42,18 @@ repositories {
     }
 
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
-    maven { url = "https://mvn.devos.one/snapshots" } // Registrate
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate, Create Fabric snapshot, Porting Lib
     maven { url = "https://maven.ryanhcode.dev/releases" } // Sable
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port (Create Fabric runtime)
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CurseMaven'
+                url = 'https://cursemaven.com'
+            }
+        }
+        filter { includeGroup('curse.maven') }
+    }
 }
 
 // Declare capabilities on the outgoing configurations.
@@ -57,6 +67,12 @@ repositories {
     publishing.publications.configureEach {
         suppressPomMetadataWarningsFor(variant)
     }
+}
+
+tasks.withType(Javadoc).configureEach {
+    // the sources use a custom @project tag in their headers
+    options.tags = ['project:a:Project:']
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 sourcesJar {
@@ -97,6 +113,7 @@ processResources {
                        'neoforge_loader_version_range': neoforge_loader_version_range,
                        "forge_version"                : forge_version,
                        "forge_loader_version_range"   : forge_loader_version_range,
+                       'create_version_range'         : create_version_range,
                        'credits'                      : credits,
                        'java_version'                 : java_version]
 

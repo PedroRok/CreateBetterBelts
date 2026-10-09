@@ -10,10 +10,26 @@ dependencies {
     }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    modImplementation("com.simibubi.create:create-fucked-up-${minecraft_version}:${create_fabric_version}") { transitive = false }
+
+    modImplementation("com.tterrag.registrate_fabric:Registrate-Fabric:${registrate_fabric_version}") { transitive = false }
+    modImplementation("net.createmod.ponder:Ponder-Fabric-${minecraft_version}:${ponder_fabric_version}") { transitive = false } // Catnip is inside
+    modCompileOnly("dev.engine-room.flywheel:flywheel-fabric-api-${minecraft_version}:${flywheel_fabric_version}")
+    modLocalRuntime("dev.engine-room.flywheel:flywheel-fabric-${minecraft_version}:${flywheel_fabric_version}")
+    porting_lib_modules.split(',').each { module ->
+        modImplementation("io.github.fabricators_of_create.Porting-Lib:${module}:${porting_lib_version}") { transitive = false }
+    }
+
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+
+    modLocalRuntime("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_api_port_version}")
+    modLocalRuntime("io.github.llamalad7:mixinextras-fabric:${mixinextras_fabric_version}")
+    modLocalRuntime("curse.maven:modern-keybinding-fabric-695433:${modern_keybinding_curse_file}")
 }
 
 loom {
-    def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+    def aw = project.rootProject.file("common/src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
     }
@@ -32,6 +48,16 @@ loom {
             setConfigName('Fabric Server')
             ideConfigGenerated(true)
             runDir('runs/server')
+        }
+        datagen {
+            client()
+            setConfigName('Fabric Data')
+            ideConfigGenerated(true)
+            runDir('runs/datagen')
+            vmArg '-Dfabric-api.datagen'
+            vmArg "-Dfabric-api.datagen.output-dir=${project.rootProject.file('common/src/generated/resources').absolutePath}"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
+            vmArg "-Dporting_lib.datagen.existing_resources=${project.rootProject.file('common/src/main/resources').absolutePath}"
         }
     }
 }
