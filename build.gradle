@@ -1,6 +1,67 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     // see https://fabricmc.net/develop/ for new versions
     id 'fabric-loom' version '1.7-SNAPSHOT' apply false
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
     id 'net.neoforged.moddev' version '0.1.110' apply false
+    // see https://modmuss50.github.io/mod-publish-plugin/
+    id 'me.modmuss50.mod-publish-plugin' version '2.2.1'
+}
+
+evaluationDependsOnChildren()
+
+publishMods {
+    version = project.version
+    changelog = providers.fileContents(layout.projectDirectory.file('CHANGELOG.md')).asText
+    type = ReleaseType.valueOf(providers.gradleProperty('releaseType').getOrElse('STABLE').toUpperCase())
+    dryRun = providers.gradleProperty('dryRun').isPresent()
+
+    def loaders = [
+            fabric  : [project: ':fabric', label: 'Fabric', jarTask: 'remapJar', createSlug: 'create-fabric'],
+            neoforge: [project: ':neoforge', label: 'NeoForge', jarTask: 'jar', createSlug: 'create'],
+    ]
+
+    def cfOptions = curseforgeOptions {
+        accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
+        projectId = curseforge_project_id
+        projectSlug = curseforge_project_slug
+        minecraftVersions.add(minecraft_version)
+        client = true
+        server = true
+    }
+
+    def mrOptions = modrinthOptions {
+        accessToken = providers.environmentVariable('MODRINTH_TOKEN')
+        projectId = modrinth_project_id
+        minecraftVersions.add(minecraft_version)
+        environment = CLIENT_AND_SERVER
+    }
+
+    loaders.each { loader, info ->
+        def name = "${mod_name} ${project.version} - ${info.label} ${minecraft_version}"
+        def jar = project(info.project).tasks.named(info.jarTask, AbstractArchiveTask)
+
+        curseforge("curseforge${info.label}") {
+            from cfOptions
+            file = jar.flatMap { it.archiveFile }
+            displayName = name
+            modLoaders.add(loader)
+            requires(info.createSlug)
+            if (loader == 'fabric') {
+                requires('fabric-api')
+            }
+        }
+
+        modrinth("modrinth${info.label}") {
+            from mrOptions
+            file = jar.flatMap { it.archiveFile }
+            displayName = name
+            modLoaders.add(loader)
+            requires(info.createSlug)
+            if (loader == 'fabric') {
+                requires('fabric-api')
+            }
+        }
+    }
 }
