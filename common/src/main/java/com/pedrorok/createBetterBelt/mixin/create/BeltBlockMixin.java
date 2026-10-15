@@ -13,6 +13,7 @@ import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -43,6 +44,14 @@ public class BeltBlockMixin {
 		at = @At(value = "INVOKE", target = BELT_ENTRY_HAS))
 	private boolean cbb$anyBelt(BlockEntry<?> entry, BlockState state) {
 		return BeltIdentity.isBelt(entry, state);
+	}
+
+	@Redirect(method = "onRemove", at = @At(value = "INVOKE",
+		target = "Lcom/simibubi/create/content/kinetics/belt/BeltBlock;getRotationAxis(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/core/Direction$Axis;"))
+	private Axis cbb$neighbourShaftAxis(BeltBlock self, BlockState neighbour) {
+		if (neighbour.getBlock() instanceof BeltBlock belt)
+			return belt.getRotationAxis(neighbour);
+		return self.getRotationAxis(neighbour);
 	}
 
 	@Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)

@@ -4,6 +4,7 @@ import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 
 import com.pedrorok.createBetterBelt.content.inlinebelt.InlineBeltBlock;
 import com.pedrorok.createBetterBelt.platform.Services;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.belt.BeltModel;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -27,6 +28,7 @@ public class CBBBlocks {
 				.mapColor(MapColor.COLOR_GRAY))
 			.addLayer(() -> RenderType::cutoutMipped)
 			.transform(axeOrPickaxe())
+			.loot((p, b) -> p.dropOther(b, AllItems.BELT_CONNECTOR.get()))
 			.onRegister(CreateRegistrate.blockModel(() -> BeltModel::new))
 			.transform(Services.PLATFORM.inlineBeltPlatformSetup())
 			.register();
