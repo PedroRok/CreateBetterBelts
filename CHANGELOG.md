@@ -1,4 +1,4 @@
-# Create Better Belt 0.1.2 (beta) - Minecraft 1.21.1
+# Create Better Belt 0.1.3 (beta) - Minecraft 1.21.1
 
 - Added the mod icon to the mod list on Fabric and NeoForge
 - Fixed the Inline Belt casing being rotated on Fabric (the casing models relied on a NeoForge-only model transform)

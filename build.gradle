@@ -3,8 +3,8 @@ import me.modmuss50.mpp.ReleaseType
 plugins {
     // see https://fabricmc.net/develop/ for new versions
     id 'fabric-loom' version '1.7-SNAPSHOT' apply false
-    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
-    id 'net.neoforged.moddev' version '0.1.110' apply false
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions (legacyforge = Forge 1.20.1)
+    id 'net.neoforged.moddev.legacyforge' version '2.0.107' apply false
     // see https://modmuss50.github.io/mod-publish-plugin/
     id 'me.modmuss50.mod-publish-plugin' version '2.2.1'
 }
@@ -17,9 +17,10 @@ publishMods {
     type = ReleaseType.valueOf(providers.gradleProperty('releaseType').getOrElse('STABLE').toUpperCase())
     dryRun = providers.gradleProperty('dryRun').isPresent()
 
+    // No 1.20.1 o NeoForge (47.1.x) e um fork do Forge e carrega o mesmo jar, entao o jar do Forge sai para os dois.
     def loaders = [
-            fabric  : [project: ':fabric', label: 'Fabric', jarTask: 'remapJar', createSlug: 'create-fabric'],
-            neoforge: [project: ':neoforge', label: 'NeoForge', jarTask: 'jar', createSlug: 'create'],
+            fabric: [project: ':fabric', label: 'Fabric', jarTask: 'remapJar', createSlug: 'create-fabric', modLoaders: ['fabric']],
+            forge : [project: ':forge', label: 'Forge', jarTask: 'reobfJar', createSlug: 'create', modLoaders: ['forge', 'neoforge']],
     ]
 
     def cfOptions = curseforgeOptions {
@@ -46,7 +47,7 @@ publishMods {
             from cfOptions
             file = jar.flatMap { it.archiveFile }
             displayName = name
-            modLoaders.add(loader)
+            modLoaders.addAll(info.modLoaders)
             requires(info.createSlug)
             if (loader == 'fabric') {
                 requires('fabric-api')
@@ -57,7 +58,7 @@ publishMods {
             from mrOptions
             file = jar.flatMap { it.archiveFile }
             displayName = name
-            modLoaders.add(loader)
+            modLoaders.addAll(info.modLoaders)
             requires(info.createSlug)
             if (loader == 'fabric') {
                 requires('fabric-api')

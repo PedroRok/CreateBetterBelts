@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
 @Mixin(BeltConnectorItem.class)
 public class BeltConnectorItemMixin {
 
-	@Inject(method = "canConnect", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "canConnect", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void cbb$allowInline(Level world, BlockPos first, BlockPos second,
 		CallbackInfoReturnable<Boolean> cir) {
 		if (InlineBeltPlacement.isInlineConnection(world, first, second)
@@ -41,7 +41,7 @@ public class BeltConnectorItemMixin {
 			original.call(world, start, end);
 	}
 
-	@Inject(method = "createBelts", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "createBelts", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void cbb$createInline(Level world, BlockPos start, BlockPos end, CallbackInfo ci) {
 		if (InlineBeltPlacement.isInlineConnection(world, start, end)) {
 			InlineBeltPlacement.createInlineBelts(world, start, end, BeltBlockEntity.CasingType.ANDESITE);

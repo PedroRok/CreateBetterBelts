@@ -33,14 +33,14 @@ public class BeltVisualMixin {
 	private BlockState cbb$orientationState;
 
 	@SuppressWarnings("rawtypes")
-	@Redirect(method = "getOrientation", at = @At(value = "INVOKE",
+	@Redirect(method = "getOrientation", remap = false, at = @At(value = "INVOKE", remap = true,
 		target = "Lnet/minecraft/world/level/block/state/BlockState;getValue(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;"))
 	private Comparable cbb$rememberState(BlockState state, Property property) {
 		cbb$orientationState = state;
 		return state.getValue(property);
 	}
 
-	@Inject(method = "getOrientation", at = @At("RETURN"), cancellable = true)
+	@Inject(method = "getOrientation", at = @At("RETURN"), cancellable = true, remap = false)
 	private void cbb$pulleyAlongBelt(CallbackInfoReturnable<Direction> cir) {
 		cir.setReturnValue(InlineBeltBlock.pulleyDirection(cbb$orientationState, cir.getReturnValue()));
 	}

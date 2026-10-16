@@ -13,7 +13,6 @@ import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +27,7 @@ public class BeltBlockEntityMixin implements ReversibleBelt {
 	@Unique
 	private boolean cbb$reversed;
 
-	@Redirect(method = { "tick", "hasPulley" }, at = @At(value = "INVOKE",
+	@Redirect(method = { "tick", "hasPulley" }, remap = false, at = @At(value = "INVOKE", remap = true,
 		target = "Lcom/tterrag/registrate/util/entry/BlockEntry;has(Lnet/minecraft/world/level/block/state/BlockState;)Z"))
 	private boolean cbb$anyBelt(BlockEntry<?> entry, BlockState state) {
 		return BeltIdentity.isBelt(entry, state);
@@ -47,17 +46,17 @@ public class BeltBlockEntityMixin implements ReversibleBelt {
 		cbb$self().notifyUpdate();
 	}
 
-	@Inject(method = "write", at = @At("HEAD"))
-	private void cbb$write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+	@Inject(method = "write", at = @At("HEAD"), remap = false)
+	private void cbb$write(CompoundTag tag, boolean clientPacket, CallbackInfo ci) {
 		tag.putBoolean("Reversed", cbb$reversed);
 	}
 
-	@Inject(method = "read", at = @At("HEAD"))
-	private void cbb$read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+	@Inject(method = "read", at = @At("HEAD"), remap = false)
+	private void cbb$read(CompoundTag tag, boolean clientPacket, CallbackInfo ci) {
 		cbb$reversed = tag.getBoolean("Reversed");
 	}
 
-	@Inject(method = "setController", at = @At("TAIL"))
+	@Inject(method = "setController", at = @At("TAIL"), remap = false)
 	private void cbb$adoptControllerDirection(BlockPos controller, CallbackInfo ci) {
 		BeltBlockEntity self = cbb$self();
 		Level level = self.getLevel();

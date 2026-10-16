@@ -58,10 +58,10 @@ public class InlineBeltGenerator extends BeltGenerator {
 	}
 
 	private static ModelFile create(String path) {
-		return new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(CREATE, path));
+		return new ModelFile.UncheckedModelFile(new ResourceLocation(CREATE, path));
 	}
 
 	private static ModelFile own(String path) {
-		return new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path));
+		return new ModelFile.UncheckedModelFile(new ResourceLocation(Constants.MOD_ID, path));
 	}
 }

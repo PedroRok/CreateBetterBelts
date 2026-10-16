@@ -14,6 +14,6 @@ public class CreateBetterBeltDatagen implements DataGeneratorEntrypoint {
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
-		CBBRegistrate.get().onData(generator.createPack(), ExistingFileHelper.withResourcesFromArg());
+		CBBRegistrate.get().setupDatagen(generator.createPack(), ExistingFileHelper.withResourcesFromArg());
 	}
 }

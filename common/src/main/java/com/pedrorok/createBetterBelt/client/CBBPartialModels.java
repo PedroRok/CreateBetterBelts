@@ -17,7 +17,7 @@ public class CBBPartialModels {
 	public static final PartialModel INLINE_BELT_END = block("inline_belt_end");
 
 	private static PartialModel block(String path) {
-		return PartialModel.of(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "block/" + path));
+		return PartialModel.of(new ResourceLocation(Constants.MOD_ID, "block/" + path));
 	}
 
 	public static void init() {}

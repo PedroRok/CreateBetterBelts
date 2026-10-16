@@ -1,6 +1,5 @@
 package com.pedrorok.createBetterBelt;
 
-import com.pedrorok.createBetterBelt.registry.CBBItemStorage;
 import com.pedrorok.createBetterBelt.registry.CBBRegistrate;
 
 import net.fabricmc.api.ModInitializer;
@@ -16,8 +15,6 @@ public class CreateBetterBelt implements ModInitializer {
 		CommonClass.init();
 
 		CBBRegistrate.buildEntries();
-		CBBRegistrate.get().registerEventListeners();
-
-		CBBItemStorage.register();
+		CBBRegistrate.get().register();
 	}
 }

@@ -9,7 +9,7 @@
 > [!IMPORTANT]
 > This mod is in beta and under active development, bugs are expected. [Please report any issues](https://github.com/PedroRok/CreateBetterBelts/issues)!
 >
-> Available for **Fabric** and **NeoForge** on Minecraft 1.21.1. Requires [Create](https://modrinth.com/mod/create) 6.0 or newer (and [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric)
+> Available for **Forge**, **NeoForge** and **Fabric** on Minecraft 1.20.1 (the same jar runs on Forge and NeoForge). Requires [Create](https://modrinth.com/mod/create) 6.0 or newer (and [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric)
 
 ### Welcome to Create: Better Belt!
 

@@ -42,9 +42,20 @@ repositories {
     }
 
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
-    maven { url = "https://mvn.devos.one/snapshots" } // Registrate, Create Fabric snapshot, Porting Lib
-    maven { url = "https://maven.ryanhcode.dev/releases" } // Sable
+    maven { url = "https://maven.ithundxr.dev/mirror" } // Registrate (Forge)
+    maven { url = "https://mvn.devos.one/releases" } // Porting Lib
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate Fabric, Milk Lib
+    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes (Create Fabric runtime)
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port (Create Fabric runtime)
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter { includeGroup('maven.modrinth') } // Create Fabric (release)
+    }
     exclusiveContent {
         forRepository {
             maven {
@@ -109,15 +120,14 @@ processResources {
                        'mod_id'                       : mod_id,
                        'license'                      : license,
                        'description'                  : project.description,
-                       'neoforge_version'             : neoforge_version,
-                       'neoforge_loader_version_range': neoforge_loader_version_range,
-                       "forge_version"                : forge_version,
-                       "forge_loader_version_range"   : forge_loader_version_range,
+                       'forge_version'                : forge_version,
+                       'forge_version_range'          : forge_version_range,
+                       'forge_loader_version_range'   : forge_loader_version_range,
                        'create_version_range'         : create_version_range,
                        'credits'                      : credits,
                        'java_version'                 : java_version]
 
-    filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
+    filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
         expand expandProps
     }
     inputs.properties(expandProps)

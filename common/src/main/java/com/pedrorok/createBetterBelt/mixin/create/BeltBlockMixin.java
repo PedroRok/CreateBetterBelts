@@ -17,7 +17,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,8 +34,8 @@ public class BeltBlockMixin {
 	private static final String BELT_ENTRY_HAS =
 		"Lcom/tterrag/registrate/util/entry/BlockEntry;has(Lnet/minecraft/world/level/block/state/BlockState;)Z";
 
-	@Redirect(method = { "initBelt", "getBeltChain", "canTransportObjects" },
-		at = @At(value = "INVOKE", target = BELT_ENTRY_HAS))
+	@Redirect(method = { "initBelt", "getBeltChain", "canTransportObjects" }, remap = false,
+		at = @At(value = "INVOKE", target = BELT_ENTRY_HAS, remap = true))
 	private static boolean cbb$anyBeltStatic(BlockEntry<?> entry, BlockState state) {
 		return BeltIdentity.isBelt(entry, state);
 	}
@@ -54,20 +54,21 @@ public class BeltBlockMixin {
 		return self.getRotationAxis(neighbour);
 	}
 
-	@Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
-	private void cbb$wrenchReverses(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
-		InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<ItemInteractionResult> cir) {
+	@Inject(method = "use", at = @At("HEAD"), cancellable = true)
+	private void cbb$wrenchReverses(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+		BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
+		ItemStack stack = player.getItemInHand(hand);
 		if (player.isShiftKeyDown() || !player.mayBuild() || !AllItems.WRENCH.isIn(stack))
 			return;
 		if (level.isClientSide) {
-			cir.setReturnValue(ItemInteractionResult.SUCCESS);
+			cir.setReturnValue(InteractionResult.SUCCESS);
 			return;
 		}
 		if (!BeltReversal.toggleDirection(level, pos)) {
-			cir.setReturnValue(ItemInteractionResult.FAIL);
+			cir.setReturnValue(InteractionResult.FAIL);
 			return;
 		}
 		level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, .75f, 1.2f);
-		cir.setReturnValue(ItemInteractionResult.SUCCESS);
+		cir.setReturnValue(InteractionResult.SUCCESS);
 	}
 }

@@ -13,10 +13,10 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelFile;
 
 /**
- * @author Rok, Pedro Lucas nmm. 08/10/2026
+ * @author Rok, Pedro Lucas nmm. 14/10/2026
  * @project create-better-belt
  */
 public class InlineBeltGenerator extends BeltGenerator {
@@ -58,10 +58,10 @@ public class InlineBeltGenerator extends BeltGenerator {
 	}
 
 	private static ModelFile create(String path) {
-		return new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(CREATE, path));
+		return new ModelFile.UncheckedModelFile(new ResourceLocation(CREATE, path));
 	}
 
 	private static ModelFile own(String path) {
-		return new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path));
+		return new ModelFile.UncheckedModelFile(new ResourceLocation(Constants.MOD_ID, path));
 	}
 }

@@ -1,14 +1,16 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
-neoForge {
-    version = neoforge_version
+legacyForge {
+    // Compila contra o Forge porque o jar do Create expoe tipos do Forge nas assinaturas (NonNullPredicate,
+    // BakedModelWrapper...). Nada do Forge pode ser usado aqui: o modulo fabric compila esses mesmos fontes.
+    version = "${minecraft_version}-${forge_version}"
     // Automatically enable AccessTransformers if the file exists
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers.add(at.absolutePath)
+        accessTransformers.from(at.absolutePath)
     }
     parchment {
         minecraftVersion = parchment_minecraft
@@ -18,14 +20,15 @@ neoForge {
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
-    // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
-    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
-    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    // o Create bundla o MixinExtras no Forge e o Fabric Loader ja traz o dele, entao e seguro usar no common
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: mixinextras_version
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: mixinextras_version
 
-    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    compileOnly("com.tterrag.registrate:Registrate:${registrate_version}")
-    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
-    compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    // jar do Forge, remapeado de SRG para os nomes oficiais
+    modCompileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    modCompileOnly("com.tterrag.registrate:Registrate:${registrate_version}") { transitive = false }
+    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}") { transitive = false }
+    modCompileOnly("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}") { transitive = false }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'

@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import com.pedrorok.createBetterBelt.content.inlinebelt.InlineBeltPlacement;
-import com.simibubi.create.AllDataComponents;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.belt.item.BeltConnectorHandler;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
@@ -13,6 +12,8 @@ import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,8 +47,9 @@ public class BeltConnectorHandlerMixin {
 			ItemStack held = player.getItemInHand(hand);
 			if (!AllItems.BELT_CONNECTOR.isIn(held))
 				continue;
-			if (held.has(AllDataComponents.BELT_FIRST_SHAFT))
-				return held.get(AllDataComponents.BELT_FIRST_SHAFT);
+			CompoundTag tag = held.getTag();
+			if (tag != null && tag.contains("FirstPulley"))
+				return NbtUtils.readBlockPos(tag.getCompound("FirstPulley"));
 		}
 		return null;
 	}

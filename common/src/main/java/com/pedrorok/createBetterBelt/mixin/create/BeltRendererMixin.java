@@ -31,22 +31,23 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(BeltRenderer.class)
 public class BeltRendererMixin {
 
-	@Redirect(method = "renderSafe", at = @At(value = "INVOKE",
+	@Redirect(method = "renderSafe", remap = false, at = @At(value = "INVOKE", remap = true,
 		target = "Lcom/tterrag/registrate/util/entry/BlockEntry;has(Lnet/minecraft/world/level/block/state/BlockState;)Z"))
 	private boolean cbb$anyBelt(BlockEntry<?> entry, BlockState state) {
 		return BeltIdentity.isBelt(entry, state);
 	}
 
 	@Redirect(
-		method = "renderSafe",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Direction;getClockWise()Lnet/minecraft/core/Direction;"))
+		method = "renderSafe", remap = false,
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Direction;getClockWise()Lnet/minecraft/core/Direction;",
+			remap = true))
 	private Direction cbb$pulleyAlongBelt(Direction facing, BeltBlockEntity be, float partialTicks, PoseStack ms,
 		MultiBufferSource buffer, int light, int overlay) {
 		return InlineBeltBlock.pulleyDirection(be.getBlockState(), facing.getClockWise());
 	}
 
 	@Redirect(
-		method = "renderSafe",
+		method = "renderSafe", remap = false,
 		at = @At(value = "INVOKE",
 			target = "Lcom/simibubi/create/content/kinetics/belt/BeltRenderer;getBeltPartial(ZZZZ)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;"))
 	private PartialModel cbb$inlineBeltEnds(boolean diagonal, boolean start, boolean end, boolean bottom,
@@ -56,7 +57,7 @@ public class BeltRendererMixin {
 	}
 
 	@Redirect(
-		method = "renderSafe",
+		method = "renderSafe", remap = false,
 		at = @At(value = "INVOKE",
 			target = "Lcom/simibubi/create/content/kinetics/base/KineticBlockEntityRenderer;standardKineticRotationTransform(Lnet/createmod/catnip/render/SuperByteBuffer;Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;I)Lnet/createmod/catnip/render/SuperByteBuffer;"))
 	private SuperByteBuffer cbb$pulleyFollowsShaft(SuperByteBuffer buffer, KineticBlockEntity be, int light) {
